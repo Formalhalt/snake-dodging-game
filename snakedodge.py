@@ -42,7 +42,7 @@ EnemyE2Y = 0
 EnemyE2X_change = 0
 EnemyE2Y_change = 0
 
-# bullets
+# Weapons
 
 Bullet1Img = pygame.image.load('wepunee.png')
 Bullet1Img = pygame.transform.scale(Bullet1Img, (40, 40))
@@ -67,14 +67,20 @@ BulE2X_change = 0.5
 BulE2Y_change = 0
 BulE2_state = "GOO"
 
+lazerImg = pygame.image.load('Lazer.png')
+lazerImg = pygame.transform.scale(lazerImg, (40, 10))
+lazerX = playerX
+lazerY = playerY
+lazerX_change = 0.4
+lazerY_change = 0
+lazer_state = "Burn"
+
 # score
 
 score_value = 0
 font = pygame.font.Font('freesansbold.ttf', 32)
 textX = 179
 textY = 30
-
-game_over = pygame.font.Font('freesansbold.ttf', 100)
 
 
 def s_score(x, y):
@@ -86,6 +92,12 @@ def e2_fire(x, y):
     global BulE2_state
     BulE2_state = "SHOT"
     screen.blit(BulE2img, (x + 1, y + 0))
+
+
+def lazer_fire(x, y):
+    global lazer_state
+    lazer_state = "Beam"
+    screen.blit(lazerImg, (x + 1, y + 0))
 
 
 def fire_player(x, y):
@@ -177,7 +189,10 @@ while running:
                 if BulE2_state == "GOO":
                     BulE2Y = EnemyE2Y
                     e2_fire(EnemyE2Y, BulE2X)
-
+            if event.key == pygame.K_a:
+                if lazer_state == "Burn":
+                    lazerY = playerY
+                    lazer_fire(playerY, lazerX)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
                 if bullet_state == "ready":
@@ -228,6 +243,18 @@ while running:
             BulE2X += BulE2X_change
 
         enemy2(EnemyE2X, EnemyE2Y)
+
+    # New Additional Weapon achieved!
+
+    if score_value >= 15:
+
+        if lazerX <= 0:
+            lazerX = playerX
+            lazer_state = "Burn"
+
+        if lazer_state == "Beam":
+            lazer_fire(lazerX, lazerY)
+            lazerX -= lazerX_change
 
     # Bullet movement
 
