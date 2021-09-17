@@ -65,7 +65,7 @@ BulE2X = EnemyE2X
 BulE2Y = 0
 BulE2X_change = 0.5
 BulE2Y_change = 0
-BulE2_state = "kiz"
+BulE2_state = "GOO"
 
 # score
 
@@ -84,7 +84,7 @@ def s_score(x, y):
 
 def e2_fire(x, y):
     global BulE2_state
-    BulE2_state = "kiz"
+    BulE2_state = "SHOT"
     screen.blit(BulE2img, (x + 1, y + 0))
 
 
@@ -114,6 +114,14 @@ def player(x, y):
 
 def game_o(Bullet1X, Bullet1Y, playerX, playerY):
     distance = math.sqrt((math.pow(Bullet1X - playerX, 2)) + (math.pow(Bullet1Y - playerY, 2)))
+    if distance < 25:
+        return True
+    else:
+        return False
+
+
+def game_o2(BulE2Y, BulE2X, playerX, playerY):
+    distance = math.sqrt((math.pow(BulE2X - playerX, 2)) + (math.pow(BulE2Y - playerY, 2)))
     if distance < 25:
         return True
     else:
@@ -166,6 +174,9 @@ while running:
                 if bullet2_state == "GO":
                     Bullet2X = playerX
                     fire_player(playerX, Bullet2Y)
+                if BulE2_state == "GOO":
+                    BulE2Y = EnemyE2Y
+                    e2_fire(EnemyE2Y, BulE2X)
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
@@ -186,8 +197,8 @@ while running:
     elif playerY >= 236:
         playerY = 236
     playerX += playerX_change
-    if playerX <= 0:
-        playerX = 0
+    if playerX <= 35:
+        playerX = 40
     elif playerX >= 336:
         playerX = 336
 
@@ -198,6 +209,8 @@ while running:
     elif Enemy1X >= 336:
         Enemy1X_change = -0.2
 
+    # ENEMY E2 ADDED
+
     if score_value >= 5:
 
         EnemyE2Y += EnemyE2Y_change
@@ -206,13 +219,13 @@ while running:
         elif EnemyE2Y >= 300:
             EnemyE2Y_change = -0.2
 
-       # if BulE2X <= 290:
-        #    BulE2X = EnemyE2Y
-         #   bullet_state = "kiz"
+        if BulE2X >= 390:
+            BulE2X = EnemyE2X
+            BulE2_state = "GOO"
 
-       # if bullet_state == "kiz":
-        #    e2_fire(BulE2X, BulE2Y)
-         #   BulE2X -= BulE2X_change
+        if BulE2_state == "SHOT":
+            e2_fire(BulE2X, BulE2Y)
+            BulE2X += BulE2X_change
 
         enemy2(EnemyE2X, EnemyE2Y)
 
@@ -263,7 +276,15 @@ while running:
         Enemy1Y = (random.randint(400, 550))
         score_value -= score_value
 
-    if score_value >= 10:
+    game_oo = game_o2(BulE2Y, BulE2X, playerX, playerY)
+    if game_oo == True:
+        playerX = 170
+        playerY = 175
+        Enemy1X = (random.randint(20, 400))
+        Enemy1Y = (random.randint(400, 550))
+        score_value -= score_value
+
+    if score_value >= 100:
         pygame.display.set_mode((400, 600))
         screen.fill((0, 0, 0))
         screen.blit(game_win, (0, 0))
