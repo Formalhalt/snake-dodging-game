@@ -140,9 +140,25 @@ def game_o2(BulE2Y, BulE2X, playerX, playerY):
         return False
 
 
+def bullet_collision3(BulE2X, BulE2Y, Bullet2X, Bullet2Y):
+    distance = math.sqrt((math.pow(BulE2X - Bullet2X, 2)) + (math.pow(BulE2Y - Bullet2Y, 2)))
+    if distance < 30:
+        return True
+    else:
+        return False
+
+
+def bullet_collision2(BulE2X, BulE2Y, lazerX, lazerY):
+    distance = math.sqrt((math.pow(BulE2X - lazerX, 2)) + (math.pow(BulE2Y - lazerY, 2)))
+    if distance < 15:
+        return True
+    else:
+        return False
+
+
 def bullet_collision(Bullet1X, Bullet1Y, Bullet2X, Bullet2Y):
     distance = math.sqrt((math.pow(Bullet1X - Bullet2X, 2)) + (math.pow(Bullet1Y - Bullet2Y, 2)))
-    if distance < 25:
+    if distance < 30:
         return True
     else:
         return False
@@ -151,6 +167,14 @@ def bullet_collision(Bullet1X, Bullet1Y, Bullet2X, Bullet2Y):
 def player_hit_enemy_col(Enemy1X, Enemy1Y, Bullet2X, Bullet2Y):
     distance = math.sqrt((math.pow(Enemy1X - Bullet2X, 2)) + (math.pow(Enemy1Y - Bullet2Y, 2)))
     if distance < 30:
+        return True
+    else:
+        return False
+
+
+def player_hit_enemy_col2(EnemyE2X, EnemyE2Y, lazerX, lazerY):
+    distance = math.sqrt((math.pow(EnemyE2X - lazerX, 2)) + (math.pow(EnemyE2Y - lazerY, 2)))
+    if distance < 90:
         return True
     else:
         return False
@@ -246,7 +270,7 @@ while running:
 
     # New Additional Weapon achieved!
 
-    if score_value >= 15:
+    if score_value >= 5:
 
         if lazerX <= 0:
             lazerX = playerX
@@ -276,13 +300,31 @@ while running:
         fire_player(Bullet2X, Bullet2Y)
         Bullet2Y += Bullet2Y_change
 
+    # Collisions
+
+    ad3 = bullet_collision3(BulE2X, BulE2Y, Bullet2X, Bullet2Y)
+    if ad3:
+        Bullet2Y = playerY
+        BulE2X = EnemyE2X
+        bullet2_state = "GO"
+        BulE2_state = "GOO"
+        score_value += 1
+
+    ad2 = bullet_collision2(BulE2X, BulE2Y, lazerX, lazerY)
+    if ad2:
+        lazerX = playerX
+        BulE2X = EnemyE2X
+        BulE2_state = "GOO"
+        lazer_state = "Burn"
+        score_value += 1
+
     B_collision = bullet_collision(Bullet1X, Bullet1Y, Bullet2X, Bullet2Y)
     if B_collision:
         Bullet2Y = playerY
         Bullet1Y = Enemy1Y
         bullet_state = "ready"
         bullet2_state = "GO"
-        score_value += 0.5
+        score_value += 1
 
     player_hit_enemy = player_hit_enemy_col(Enemy1X, Enemy1Y, Bullet2X, Bullet2Y)
     if player_hit_enemy:
@@ -291,12 +333,19 @@ while running:
         bullet2_state = "GO"
         score_value += 5
 
+    player_hit_enemy2 = player_hit_enemy_col(EnemyE2X, EnemyE2Y, lazerX, lazerY)
+    if player_hit_enemy2:
+        lazerX = playerX
+        EnemyE2Y = random.randint(0, 300)
+        bullet2_state = "GO"
+        score_value += 6
+
     s_score(textX, textY)
     enemy(Enemy1X, Enemy1Y)
     player(playerX, playerY)
 
     game_oo = game_o(Bullet1X, Bullet1Y, playerX, playerY)
-    if game_oo == True:
+    if game_oo:
         playerX = 170
         playerY = 175
         Enemy1X = (random.randint(20, 400))
@@ -304,7 +353,7 @@ while running:
         score_value -= score_value
 
     game_oo = game_o2(BulE2Y, BulE2X, playerX, playerY)
-    if game_oo == True:
+    if game_oo:
         playerX = 170
         playerY = 175
         Enemy1X = (random.randint(20, 400))
