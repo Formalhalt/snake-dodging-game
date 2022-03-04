@@ -1,7 +1,6 @@
 import math
 import random
 import pygame
-from pygame import mixer
 
 # Starts pygame
 pygame.init()
@@ -18,7 +17,6 @@ pygame.display.set_icon(icon)
 game_win = pygame.image.load('winner.jpg')
 go_screen = pygame.image.load("GAAME OVER.jpg")
 
-# skins
 
 # Player
 playerImg = pygame.image.load('snakey player.png')
@@ -30,13 +28,17 @@ playerY_change = 0
 
 # Enemies
 
-Enemy1Img = (pygame.image.load('ENEMEy.png'))
+Enemy1Img = (pygame.image.load('ENEMEy.jpg'))
+Enemy1Img = pygame.transform.scale(Enemy1Img, (40, 40))
+
 Enemy1X = (random.randint(20, 400))
 Enemy1Y = (random.randint(400, 550))
 Enemy1X_change = (random.randint(1, 2))
 Enemy1Y_change = 0
 
-EnemyE2Img = (pygame.image.load('ENEMEy.png'))
+EnemyE2Img = (pygame.image.load('ENEMEy.jpg'))
+EnemyE2Img = pygame.transform.scale(EnemyE2Img, (40, 40))
+
 EnemyE2X = -10
 EnemyE2Y = 0
 EnemyE2X_change = 0
@@ -75,17 +77,34 @@ lazerX_change = 0.4
 lazerY_change = 0
 lazer_state = "Burn"
 
-# score
 
-score_value = 0
-font = pygame.font.Font('freesansbold.ttf', 32)
+# score
+score_value = 1
+score_font = pygame.font.Font('freesansbold.ttf', 32)
 textX = 179
 textY = 30
 
 
+def un(x, y):
+    eE = font.render(str(eEgg), True, (255, 0 ,255))
+    screen.blit(eE, (x, y))
+
+def l1(x, y):
+    loreS1 = font.render(str(lore1), True, (255, 255, 255))
+    screen.blit(loreS1, (x, y))
+
+def l2(x, y):
+    loreS2 = font.render(str(lore2), True, (255, 255, 255))
+    screen.blit(loreS2, (x, y))
+
+def l3(x, y):
+    loreS3 = font.render(str(lore3), True, (255, 255, 255))
+    screen.blit(loreS3, (x, y))
+
 def s_score(x, y):
-    score = font.render(str(score_value), True, (255, 255, 255))
+    score = score_font.render(str(score_value), True, (255, 255, 255))
     screen.blit(score, (x, y))
+
 
 
 def e2_fire(x, y):
@@ -229,6 +248,7 @@ while running:
             if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                 playerY_change = 0
 
+
     # Player movement
     playerY += playerY_change
     if playerY <= 0:
@@ -268,6 +288,7 @@ while running:
 
         enemy2(EnemyE2X, EnemyE2Y)
 
+
     # New Additional Weapon achieved!
 
     if score_value >= 5:
@@ -279,6 +300,11 @@ while running:
         if lazer_state == "Beam":
             lazer_fire(lazerX, lazerY)
             lazerX -= lazerX_change
+
+
+
+
+
 
     # Bullet movement
 
@@ -301,7 +327,6 @@ while running:
         Bullet2Y += Bullet2Y_change
 
     # Collisions
-
     ad3 = bullet_collision3(BulE2X, BulE2Y, Bullet2X, Bullet2Y)
     if ad3:
         Bullet2Y = playerY
@@ -340,6 +365,32 @@ while running:
         bullet2_state = "GO"
         score_value += 6
 
+
+    if score_value <= 10:
+        lore1 = "Is this all I will ever be?"
+        font = pygame.font.Font('freesansbold.ttf', 4)
+        lore1x = 150
+        lore1y = 20
+
+        l1(lore1x, lore1y)
+
+
+    if score_value == 20:
+        lore2 = "I wanted to be more than this"
+        font = pygame.font.Font('freesansbold.ttf', 4)
+        lore2x = 150
+        lore2y = 20
+
+        l2(lore2x, lore2y)
+
+    if score_value == 30:
+        lore3 = "They said they loved me. They said they needed me. They said-"
+        font = pygame.font.Font('freesansbold.ttf', 3)
+        lore3x = 150
+        lore3y = 20
+
+        l3(lore3x, lore3y)
+
     s_score(textX, textY)
     enemy(Enemy1X, Enemy1Y)
     player(playerX, playerY)
@@ -364,6 +415,35 @@ while running:
         pygame.display.set_mode((400, 600))
         screen.fill((0, 0, 0))
         screen.blit(game_win, (0, 0))
+     
+
+    if score_value == 420:
+        eEgg = "funni numba"
+        font = pygame.font.Font('freesansbold.ttf', 3)
+        eEgg1x = 50
+        eEgg1y = 20
+
+        un(eEgg1x, eEgg1y)
+
+
+
+
+
+
+
+
+
+
+
 
     clock.tick(600000000000000000000)
     pygame.display.update()
+
+
+
+
+########################33
+# WORK ON LORE STORY, DISPLAY, AND LORE REVEAL CONDITIONS
+
+#GAME SWITCH UP IF SCORE = 0
+# CODING NEEDED ^
